@@ -21,9 +21,32 @@ class AssetURLGenerator
      * @param $asset
      */
     public function url($asset, $absolute = false) {
+        $url = $asset;
+        $parts = pathinfo($url);
+        $dirname = ends_with($parts['dirname'], '/') ? $parts['dirname'] : $parts['dirname'] . '/';
+        $url = "{$dirname}{$parts['filename']}.{$parts['extension']}";
+
+        $base = Config::get("cachebuster::cdn").'/';
+        if ($base === '' && $absolute) {
+            $base = URL::to('/');
+        }
+        return $base . $url;
+    }
+
+    public function cachebust_url($asset, $absolute = false) {
         $url = $this->cachebusted($asset);
 
-        $base = Config::get("cachebuster::cdn");
+        $base = Config::get("cachebuster::cdn").'/';
+        if ($base === '' && $absolute) {
+            $base = URL::to('/');
+        }
+        return $base . $url;
+    }
+
+    public function bust_url($asset, $absolute = false) {
+        $url = $this->cachebusted($asset);
+
+        $base = Config::get("cachebuster::cdn").'/';
         if ($base === '' && $absolute) {
             $base = URL::to('/');
         }
