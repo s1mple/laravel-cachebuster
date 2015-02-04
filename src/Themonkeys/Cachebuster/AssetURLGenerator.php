@@ -61,7 +61,7 @@ class AssetURLGenerator
         if ($md5) {
             $parts = pathinfo($url);
             $dirname = ends_with($parts['dirname'], '/') ? $parts['dirname'] : $parts['dirname'] . '/';
-            $url = "{$dirname}{$parts['filename']}-$md5.{$parts['extension']}";
+            $url = "{$dirname}md5/{$parts['filename']}-$md5.{$parts['extension']}";
         }
         return $url;
     }
@@ -74,7 +74,7 @@ class AssetURLGenerator
             if (File::exists($path) && File::isFile($path)) {
                 return md5_file($path);
             } else {
-                throw new \Exception("Asset '$path' not found");
+                throw new \Exception("Asset: '$asset', path: '$path' not found");
             }
         };
         if ($expiry) {
